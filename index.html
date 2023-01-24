@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Conversor de monedas Nacional</h1>
+
+        <h2>Pesos CLP</h2>
+        <form action="" id="formulario">
+            <input type="number" min="0" placeholder="Ingrese monto" id="monto" name="formulario" value="1">
+
+            <h2>Moneda a convertir:</h2>
+
+            <select id="selectMoneda" name="moneda">
+                <option value="" hidden selected>Seleccione moneda</option>
+                <option value="uf">UF</option>
+                <option value="dolar">DOLAR</option>
+                <option value="euro">EURO</option>
+            </select>
+            <button type="submit">Convertir</button>
+            <button type="reset">Reset</button>
+
+        </form>
+
+        <h3 id="resultado"></h3>
+        <h3 id="cargando"></h3>
+    </div>
+
+
+    <div>
+        <div>
+            <h1 >Gráfico de moneda</h1>
+        </div>
+    </div>
+    <div style="width: 90%; height: 700px;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>
