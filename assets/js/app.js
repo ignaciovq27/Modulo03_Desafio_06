@@ -4,6 +4,8 @@ const selectMoneda = document.querySelector("#selectMoneda")
 const resultado = document.querySelector("#resultado")
 const cargando = document.querySelector("#cargando")
 const google = document.querySelector("#google")
+const icon = document.getElementById("icon")
+const title = document.getElementById("title")
 
 let chart
 
@@ -39,13 +41,25 @@ async function getMonedas() {
   catch (error) {
     // console.log(error);
     // console.log("error en getMonedas");
+    resultado.classList.add("text-danger")
     resultado.innerHTML = error;
-    resultado.innerHTML = "Error en conversión: No ha seleccionado moneda de cambio.";
+    resultado.innerHTML = "Error en conversión: No ha seleccionado moneda de cambio  ";
+    icon.classList.add("fa-solid", "fa-circle-xmark", "fa-shake", "text-danger", "px-2")
+
 
   } finally {
     cargando.innerHTML = "";
-    if(selectMoneda.value){
+    if (selectMoneda.value) {
       renderGrafica()
+      resultado.classList.remove("text-danger", "text-secondary")
+      resultado.classList.add("text-primary", "p-4")
+
+      icon.classList.remove("fa-solid", "fa-circle-xmark", "fa-shake", "text-danger", "px-2")
+      icon.classList.add("fa-solid", "fa-circle-check", "fa-beat", "text-primary")
+
+      let titleMoneda = monedaUsuario
+      title.innerHTML = "Gráfico de moneda: " + titleMoneda.toUpperCase();
+      montoUsuario
     }
   }
 }
@@ -53,7 +67,14 @@ async function getMonedas() {
 // Resetear el formulario
 formulario.addEventListener("reset", (e) => {
   resultado.innerHTML = "'Esperando conversión...'"
-  console.log("me diste click al reset")
+
+  resultado.classList.remove("text-primary", "text-danger", "text-warning")
+  icon.classList.remove("fa-solid", "fa-circle-check", "fa-beat", "text-primary")
+  icon.classList.remove("fa-solid", "fa-circle-xmark", "fa-shake", "text-danger", "px-2")
+
+  resultado.classList.add("text-secondary")
+  title.innerHTML = ""
+
   if (chart) {
     chart.destroy();
   }
@@ -77,15 +98,15 @@ function prepararConfiguracionParaLaGrafica(dataValues) {
   const tipoDeGrafica = "line";
   const fechasEstaditicas = dataValues['serie'].map((fechas) => {
     const fecha = fechas.fecha
-    const dia = (new Date(fecha).getDate()) < 10 ? "0"+(new Date(fecha).getDate()) : (new Date(fecha).getDate())
-    const mes = (new Date(fecha).getMonth() + 1) < 10 ? "0"+(new Date(fecha).getMonth() + 1) : (new Date(fecha).getMonth() + 1)
+    const dia = (new Date(fecha).getDate()) < 10 ? "0" + (new Date(fecha).getDate()) : (new Date(fecha).getDate())
+    const mes = (new Date(fecha).getMonth() + 1) < 10 ? "0" + (new Date(fecha).getMonth() + 1) : (new Date(fecha).getMonth() + 1)
     const año = new Date(fecha).getFullYear()
 
-    return  dia + "/" + mes + "/" + año
+    return dia + "/" + mes + "/" + año
   });
   const cantidadFechas = fechasEstaditicas.slice(0, 10);
 
-  const titulo = "Historial Values últimas 10 fechas de " + selectMoneda.value;
+  const titulo = "Historial últimas 10 fechas de " + selectMoneda.value;
   const colorDeLinea = "blue";
 
   const valores = dataValues['serie'].map((valores) => {
@@ -104,11 +125,23 @@ function prepararConfiguracionParaLaGrafica(dataValues) {
           data: cantidadValores,
           backgroundColor: colorDeLinea,
           pointStyle: 'circle',
-          pointRadius: 6,
+          pointRadius: 10,
           pointHoverRadius: 15
         }
       ]
-    }
+    },
+    options: {
+      plugins: {
+          legend: {
+              labels: {
+                  // This more specific font property overrides the global property
+                  font: {
+                      size: 18
+                  }
+              }
+          }
+      }
+  }
   };
   return config;
 }
