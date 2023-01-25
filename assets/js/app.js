@@ -96,7 +96,7 @@ function prepararConfiguracionParaLaGrafica(dataValues) {
 
     return dia + "/" + mes + "/" + año
   });
-  const cantidadFechas = fechasEstaditicas.slice(0, 10);
+  const cantidadFechas = fechasEstaditicas.slice(21, 31);
 
   const titulo = "Historial últimas 10 fechas de " + selectMoneda.value;
   const colorDeLinea = "blue";
@@ -104,7 +104,7 @@ function prepararConfiguracionParaLaGrafica(dataValues) {
   const valores = data.map((valores) => {
     return valores.valor;
   });
-  const cantidadValores = valores.slice(0, 10);
+  const cantidadValores = valores.slice(21, 31);
 
   // Creamos el objeto de configuración usando las variables anteriores
   const config = {
