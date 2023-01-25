@@ -12,10 +12,6 @@ let chart
 // mostrar resultado en la pagina
 resultado.innerHTML = "'Esperando conversión...'"
 
-// Crear una Promise de prueba, con timer
-// const fakeLoading = () =>
-// new Promise((resolve) => setTimeout(() => resolve(), 3000))
-
 // Hacer submit en el formulario
 formulario.addEventListener("submit", (e) => {
   e.preventDefault()
@@ -26,26 +22,22 @@ async function getMonedas() {
   const montoUsuario = monto.value;
   const monedaUsuario = selectMoneda.value;
   try {
-    // llamar a la promise y luego realizar la consulta a la API
-    // await (fakeLoading())
-    // cargando.innerHTML = "Cargando..."
     const apiURL = "https://mindicador.cl/api/";
     const res = await fetch(apiURL);
     const dataMonedas = await res.json();
     console.log(dataMonedas)
+    const operacion = (montoUsuario / dataMonedas[monedaUsuario].valor).toString()
+    resultadoAcortado = operacion.slice(0,6)
 
-    resultado.innerHTML = "Resultado: $" + montoUsuario / dataMonedas[monedaUsuario].valor
+    resultado.innerHTML = "Resultado: $" + resultadoAcortado + " " + monedaUsuario
     if (montoUsuario == "") throw "is Empty";
     return dataMonedas;
   }
   catch (error) {
-    // console.log(error);
-    // console.log("error en getMonedas");
     resultado.classList.add("text-danger")
     resultado.innerHTML = error;
     resultado.innerHTML = "Error en conversión: No ha seleccionado moneda de cambio  ";
     icon.classList.add("fa-solid", "fa-circle-xmark", "fa-shake", "text-danger", "px-2")
-
 
   } finally {
     cargando.innerHTML = "";
@@ -59,7 +51,6 @@ async function getMonedas() {
 
       let titleMoneda = monedaUsuario
       title.innerHTML = "Gráfico de moneda: " + titleMoneda.toUpperCase();
-      montoUsuario
     }
   }
 }
@@ -94,9 +85,10 @@ async function getValues() {
 }
 
 function prepararConfiguracionParaLaGrafica(dataValues) {
+  const data = dataValues['serie']?.reverse()
   // Creamos las variables necesarias para el objeto de configuración
   const tipoDeGrafica = "line";
-  const fechasEstaditicas = dataValues['serie'].map((fechas) => {
+  const fechasEstaditicas = data.map((fechas) => {
     const fecha = fechas.fecha
     const dia = (new Date(fecha).getDate()) < 10 ? "0" + (new Date(fecha).getDate()) : (new Date(fecha).getDate())
     const mes = (new Date(fecha).getMonth() + 1) < 10 ? "0" + (new Date(fecha).getMonth() + 1) : (new Date(fecha).getMonth() + 1)
@@ -109,7 +101,7 @@ function prepararConfiguracionParaLaGrafica(dataValues) {
   const titulo = "Historial últimas 10 fechas de " + selectMoneda.value;
   const colorDeLinea = "blue";
 
-  const valores = dataValues['serie'].map((valores) => {
+  const valores = data.map((valores) => {
     return valores.valor;
   });
   const cantidadValores = valores.slice(0, 10);
@@ -159,10 +151,8 @@ async function renderGrafica() {
 
   chart = new Chart(chartDOM, config);
   console.log(chart.id)
-
 }
 // renderGrafica();
-
 
 selectMoneda.addEventListener("change", (e) => {
   console.log(e.target.value)
