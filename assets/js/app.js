@@ -34,7 +34,7 @@ async function getMonedas() {
     const dataMonedas = await res.json();
     console.log(dataMonedas)
 
-    resultado.innerHTML = "Resultado: $" + montoUsuario * dataMonedas[monedaUsuario].valor
+    resultado.innerHTML = "Resultado: $" + montoUsuario / dataMonedas[monedaUsuario].valor
     if (montoUsuario == "") throw "is Empty";
     return dataMonedas;
   }
