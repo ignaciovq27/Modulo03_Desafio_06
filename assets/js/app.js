@@ -27,7 +27,7 @@ async function getMonedas() {
     const dataMonedas = await res.json();
     console.log(dataMonedas)
     const operacion = (montoUsuario / dataMonedas[monedaUsuario].valor).toString()
-    resultadoAcortado = operacion.slice(0,6)
+    resultadoAcortado = operacion.slice(0,8)
 
     resultado.innerHTML = "Resultado: $" + resultadoAcortado + " " + monedaUsuario
     if (montoUsuario == "") throw "is Empty";
